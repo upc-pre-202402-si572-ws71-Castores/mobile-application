@@ -228,7 +228,7 @@ class dashboard extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(
-                              'Client',
+                              'Carrier',
                               style: TextStyle(
                                 fontSize: 15,
                                 color: Color.fromARGB(255, 10, 35, 78),
