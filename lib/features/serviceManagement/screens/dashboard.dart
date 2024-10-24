@@ -156,7 +156,7 @@ class dashboard extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    'Curent request',
+                    'Current request',
                     style: TextStyle(
                       fontSize: 30,
                       color: Color.fromARGB(255, 10, 35, 78),
@@ -228,7 +228,7 @@ class dashboard extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(
-                              'Profile',
+                              'Client',
                               style: TextStyle(
                                 fontSize: 15,
                                 color: Color.fromARGB(255, 10, 35, 78),
