@@ -12,7 +12,7 @@ class dashboard extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               gradient: LinearGradient(
                   colors: [
                     Color.fromARGB(255, 0, 17, 35),
@@ -33,7 +33,7 @@ class dashboard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(top: 30.0),
                 //alignment: Alignment.bottomLeft,
                 child: Text(
@@ -52,7 +52,7 @@ class dashboard extends StatelessWidget {
                     print('Ícono presionado');
                     //fix
                   },
-                  child: Icon(
+                  child: const Icon(
                     Icons.notification_add_rounded,
                     size: 40,
                     color: Colors.white,
@@ -75,7 +75,7 @@ class dashboard extends StatelessWidget {
               height: 140,
               child: GridView.builder(
                   itemCount: 2,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, childAspectRatio: 2 / 1),
                   itemBuilder: (context, index) {
                     return Padding(
@@ -84,7 +84,7 @@ class dashboard extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               color: Colors.black54,
                               blurRadius: 6,
@@ -101,7 +101,7 @@ class dashboard extends StatelessWidget {
                                     ? 'Actual Temperature'
                                     : 'Actual Weight',
                                 //'Actual Weight',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: Color.fromARGB(255, 10, 35, 78),
                                   fontWeight: FontWeight.bold,
@@ -116,11 +116,11 @@ class dashboard extends StatelessWidget {
                                       ? Icons.snowing
                                       : Icons.height_outlined,
                                   size: 40,
-                                  color: Color.fromARGB(255, 10, 35, 78),
+                                  color: const Color.fromARGB(255, 10, 35, 78),
                                 ),
                                 Text(
                                   index == 0 ? '05º C' : '1 KG',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 40,
                                     color: Color.fromARGB(255, 10, 35, 78),
                                     fontWeight: FontWeight.bold,
@@ -139,13 +139,13 @@ class dashboard extends StatelessWidget {
             //),
 
             Container(
-              padding: EdgeInsets.all(9.0),
+              padding: const EdgeInsets.all(9.0),
               height: 290,
-              margin: EdgeInsets.all(6.0),
+              margin: const EdgeInsets.all(6.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.white,
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black54,
                     blurRadius: 6,
@@ -155,7 +155,7 @@ class dashboard extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  Text(
+                  const Text(
                     'Current request',
                     style: TextStyle(
                       fontSize: 30,
@@ -171,7 +171,7 @@ class dashboard extends StatelessWidget {
                             color: const Color.fromARGB(52, 158, 158, 158),
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          child: Column(
+                          child: const Column(
                             children: [
                               Text(
                                 'Ideal Temperature',
@@ -196,12 +196,12 @@ class dashboard extends StatelessWidget {
                       ),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.all(8.0),
+                          margin: const EdgeInsets.all(8.0),
                           decoration: BoxDecoration(
                             color: const Color.fromARGB(52, 158, 158, 158),
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          child: Column(
+                          child: const Column(
                             children: [
                               Text(
                                 'Ideal Weight',
@@ -227,7 +227,7 @@ class dashboard extends StatelessWidget {
                       Expanded(
                         child: Column(
                           children: [
-                            Text(
+                            const Text(
                               'Carrier',
                               style: TextStyle(
                                 fontSize: 15,
@@ -236,7 +236,7 @@ class dashboard extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(8.0),
                               child: ClipOval(
                                 child: Image.asset(
                                   'lib/shared/assets/userpic.jpg',
@@ -246,7 +246,7 @@ class dashboard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Text(
+                            const Text(
                               'Carlos Benites',
                               style: TextStyle(
                                 fontSize: 15,
@@ -260,12 +260,12 @@ class dashboard extends StatelessWidget {
                     ],
                   ),
                   Container(
-                    padding: EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(12.0),
                     child: Row(
                       children: [
                         Expanded(
                           child: Container(
-                            child: Column(
+                            child: const Column(
                               children: [
                                 Text(
                                   'Start Location',
@@ -288,14 +288,14 @@ class dashboard extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Icon(
+                        const Icon(
                           Icons.arrow_forward_ios_outlined,
                           size: 20,
                           color: Color.fromARGB(255, 10, 35, 78),
                         ),
                         Expanded(
                           child: Container(
-                            child: Column(
+                            child: const Column(
                               children: [
                                 Text(
                                   'Arrival Place',
@@ -325,12 +325,12 @@ class dashboard extends StatelessWidget {
             ),
 
             Container(
-              padding: EdgeInsets.all(9.0),
-              margin: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(9.0),
+              margin: const EdgeInsets.all(10.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.white,
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black54,
                     blurRadius: 6,
@@ -343,7 +343,7 @@ class dashboard extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Alarms',
+                    const Text('Alarms',
                         style: TextStyle(
                           fontSize: 30,
                           color: Color.fromARGB(255, 10, 35, 78),
@@ -375,16 +375,16 @@ class dashboard extends StatelessWidget {
           CrossAxisAlignment.start, // Alinear la viñeta con el texto
       children: [
         // Este ícono actúa como la viñeta
-        Icon(
+        const Icon(
           Icons.circle, // Puedes usar cualquier ícono o imagen
           size: 8.0, // Tamaño del ícono
           color: Colors.black, // Color de la viñeta
         ),
-        SizedBox(width: 8), // Espacio entre la viñeta y el texto
+        const SizedBox(width: 8), // Espacio entre la viñeta y el texto
         Expanded(
           child: Text(
             text,
-            style: TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 20),
             selectionColor: Colors.grey, // Estilo del texto
           ),
         ),
