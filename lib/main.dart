@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:transport_app_mobile/features/serviceManagement/screens/dashboard.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +16,6 @@ class MyApp extends StatelessWidget {
             ColorScheme.fromSeed(seedColor: Color.fromARGB(185, 218, 221, 249)),
         useMaterial3: true,
       ),
-      home: dashboard(),
     );
   }
 }
