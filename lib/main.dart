@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'TransportApp',
-      home: HomeScreenClient(),
+      home: HomeScreenCarrier(),
       routes: {
         'home-client':    (BuildContext context) => HomeScreenClient(),
         'home-carrier':   (BuildContext context) => HomeScreenCarrier()
