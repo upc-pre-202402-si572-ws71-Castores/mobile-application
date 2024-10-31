@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:transport_app_mobile/features/serviceManagement/screens/LoginScreen.dart';
+import 'package:transport_app_mobile/shared/screens/screens.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,13 +12,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'TransportApp',
+      routes: {
+        'home-client':    (BuildContext context) => HomeScreenClient(),
+        'home-carrier':   (BuildContext context) => HomeScreenCarrier()
+      },
       theme: ThemeData(
         colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(185, 218, 221, 249)),
+            ColorScheme.fromSeed(seedColor: const Color.fromARGB(185, 218, 221, 249)),
         useMaterial3: true,
       ),
       home: LoginScreen(),
+
     );
   }
 }
