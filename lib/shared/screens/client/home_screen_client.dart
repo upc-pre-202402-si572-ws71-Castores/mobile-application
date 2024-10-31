@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:transport_app_mobile/features/serviceManagement/screens/profileUser.dart';
 import 'package:transport_app_mobile/shared/widgets/bottomNavigationBar.dart';
 import 'package:transport_app_mobile/shared/screens/screens.dart';
 
@@ -16,7 +17,7 @@ class _HomeScreenClientState extends State<HomeScreenClient> with SingleTickerPr
     dashboard(),
     Text('Home'),
     Text('History'),
-    Text('Profile'),
+    ProfileClient(),
   ];
 
   // Cuando se selecciona un ítem en la barra de navegación
