@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:transport_app_mobile/features/serviceManagement/screens/profileUser.dart';
+import 'package:transport_app_mobile/features/serviceManagement/screens/profile_user.dart';
 import 'package:transport_app_mobile/shared/widgets/bottomNavigationBar.dart';
 import 'package:transport_app_mobile/shared/screens/screens.dart';
 
@@ -8,7 +8,8 @@ class HomeScreenClient extends StatefulWidget {
   _HomeScreenClientState createState() => _HomeScreenClientState();
 }
 
-class _HomeScreenClientState extends State<HomeScreenClient> with SingleTickerProviderStateMixin {
+class _HomeScreenClientState extends State<HomeScreenClient>
+    with SingleTickerProviderStateMixin {
   // Estado para controlar el índice de la pantalla activa
   int _selectedIndex = 0;
 
@@ -30,22 +31,14 @@ class _HomeScreenClientState extends State<HomeScreenClient> with SingleTickerPr
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: SafeArea(
-        child: _widgetOptions.elementAt(_selectedIndex), 
+        child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
-        icons: [
-          Icons.dashboard,
-          Icons.home,
-          Icons.flash_on,
-          Icons.person
-        ],
+        icons: [Icons.dashboard, Icons.home, Icons.flash_on, Icons.person],
         selectedIndex: _selectedIndex, // Índice seleccionado
         onItemTapped: _onItemTapped, // Función para cambiar de pantalla
       ),
     );
   }
-
-
 }
