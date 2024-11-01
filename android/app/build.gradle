@@ -67,4 +67,9 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    implementation platform('com.google.firebase:firebase-bom:32.0.0') // Importa Firebase BOM
+    implementation 'com.google.firebase:firebase-auth' // Firebase Authentication
+    implementation 'com.google.firebase:firebase-firestore' // Cloud Firestore (si es necesario)
+    // Agrega más dependencias de Firebase según lo que uses
+}
