@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class TransportAppService {
-  final String baseUrl = 'http://127.0.0.1:8080';
+  final String baseUrl = 'https://transportapp-crg0gmeuevexfscb.eastus2-01.azurewebsites.net';
 
   // Método para el inicio de sesión
   Future<http.Response> signIn(Map<String, String> credentials) async {
