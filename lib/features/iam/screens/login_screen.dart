@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:transport_app_mobile/shared/screens/screens.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transport_app_mobile/features/iam/screens/forgot_password_screen.dart';
 import 'package:transport_app_mobile/features/iam/services/transport_app_service.dart';
@@ -16,12 +17,15 @@ class _LoginScreenState extends State<LoginScreen> {
   final TransportAppService _transportAppService = TransportAppService();
 
   bool isSignUpMode = false;
+  String selectedRole = 'ROLE_CLIENT'; // Variable para el rol seleccionado
+
 
   Future<void> _signIn(BuildContext context) async {
     final email = emailController.text;
     final password = passwordController.text;
 
     try {
+      // Primer paso: autenticación
       final response = await _transportAppService.signIn({
         'username': email,
         'password': password,
@@ -30,15 +34,45 @@ class _LoginScreenState extends State<LoginScreen> {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final token = data['token'];
+        final userId = data['id'];
 
+        // Guarda el token y el userId en SharedPreferences para futuros usos
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token);
+        await prefs.setInt('userId', userId);
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ForgotPasswordScreen()), // Cambiar luego
-        );
+        // Segundo paso: obtener el rol del usuario usando el userId
+        final roleResponse = await _transportAppService.getUserRole(userId, token);
+
+        if (roleResponse.statusCode == 200) {
+          final roleData = jsonDecode(roleResponse.body);
+          final role = roleData['roles'][0]; // Obtiene el primer rol del usuario
+
+          // Redirige a la pantalla correspondiente según el rol
+          if (role == 'ROLE_CLIENT') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreenClient()),
+            );
+          } else if (role == 'ROLE_TRANSPORTER') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreenCarrier()),
+            );
+          } else {
+            // Si el rol no coincide, muestra un mensaje de error
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Rol desconocido')),
+            );
+          }
+        } else {
+          // Manejo de error en la solicitud del rol
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error al obtener el rol del usuario')),
+          );
+        }
       } else {
+        // Manejo de error en la autenticación
         final errorData = jsonDecode(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(errorData['message'] ?? 'Credenciales incorrectas')),
@@ -68,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final response = await _transportAppService.signUp({
         'username': email,
         'password': password,
-        'roles': ['ROLE_CLIENT'],
+        'roles': [selectedRole], // Usa el rol seleccionado aquí
       });
 
       if (response.statusCode == 201) {
@@ -78,6 +112,11 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           isSignUpMode = false;
         });
+        // Navega a SignUpScreen después de un registro exitoso
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => SingUpScreen()),
+        );
       } else {
         final errorData = jsonDecode(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -175,6 +214,27 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   obscureText: true,
                 ),
+                SizedBox(height: 10),
+                // DropdownButton para seleccionar el rol
+                DropdownButtonFormField<String>(
+                  value: selectedRole,
+                  onChanged: (String? newRole) {
+                    setState(() {
+                      selectedRole = newRole!;
+                    });
+                  },
+                  items: <String>['ROLE_CLIENT', 'ROLE_TRANSPORTER']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value == 'ROLE_CLIENT' ? 'Client' : 'Transporter'),
+                    );
+                  }).toList(),
+                  decoration: InputDecoration(
+                    labelText: 'Select Role',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
               ],
               SizedBox(height: 20),
               ElevatedButton(
@@ -195,4 +255,5 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+  
 }

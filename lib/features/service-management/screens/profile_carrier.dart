@@ -1,9 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:transport_app_mobile/features/iam/services/transport_app_service.dart';
+import 'package:transport_app_mobile/shared/screens/screens.dart';
 
 class ProfileCarrier extends StatelessWidget {
-  const ProfileCarrier({super.key});
+  ProfileCarrier({super.key});
+
+  final TransportAppService _transportAppService = TransportAppService();
+
+  Future<void> _logout(BuildContext context) async {
+    // Llama al método de signOut para eliminar el token
+    await _transportAppService.signOut();
+
+    // Redirige a la pantalla de inicio de sesión
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+      (route) => false,
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +64,12 @@ class ProfileCarrier extends StatelessWidget {
           ),
         ),
         toolbarHeight: 110,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout, color: Colors.white),
+            onPressed: () => _logout(context), // Llama al método de logout
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(

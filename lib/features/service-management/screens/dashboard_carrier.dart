@@ -227,7 +227,7 @@ class DashboardCarrier extends StatelessWidget {
                         child: Column(
                           children: [
                             const Text(
-                              'Carrier',
+                              'Client',
                               style: TextStyle(
                                 fontSize: 15,
                                 color: Color.fromARGB(255, 10, 35, 78),
@@ -246,7 +246,7 @@ class DashboardCarrier extends StatelessWidget {
                               ),
                             ),
                             const Text(
-                              'Carlos Benites',
+                              'Anthony Quispe',
                               style: TextStyle(
                                 fontSize: 15,
                                 color: Color.fromARGB(255, 10, 35, 78),
