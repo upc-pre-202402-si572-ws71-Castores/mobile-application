@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class dashboard extends StatelessWidget {
-  const dashboard({super.key});
+class DashboardCarrier extends StatelessWidget {
+  const DashboardCarrier({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -391,4 +391,5 @@ class dashboard extends StatelessWidget {
     );
   }
 }
+
 

@@ -13,9 +13,9 @@ class _HomeScreenCarrierState extends State<HomeScreenCarrier> with SingleTicker
 
   // Lista de pantallas que se mostrarán según el índice
   static List<Widget> _widgetOptions = <Widget>[
-    dashboard(),
-    Text('Home'),
-    Text('History'),
+    DashboardCarrier(),
+    CarrierOffersScreen(),
+    HistoryCarrierScreen(),
     ProfileCarrier(),
   ];
 

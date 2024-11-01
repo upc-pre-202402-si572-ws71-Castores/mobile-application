@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:transport_app_mobile/features/serviceManagement/screens/ForgotPasswordScreen.dart';
-import 'package:transport_app_mobile/features/serviceManagement/services/transport_app_service.dart';
+import 'package:transport_app_mobile/features/iam/screens/forgot_password_screen.dart';
+import 'package:transport_app_mobile/features/iam/services/transport_app_service.dart';
 
 class LoginScreen extends StatefulWidget {
   @override

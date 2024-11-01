@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:transport_app_mobile/features/serviceManagement/screens/LoginScreen.dart';
 import 'package:transport_app_mobile/shared/screens/screens.dart';
 
 void main() {
@@ -23,7 +22,7 @@ class MyApp extends StatelessWidget {
             ColorScheme.fromSeed(seedColor: const Color.fromARGB(185, 218, 221, 249)),
         useMaterial3: true,
       ),
-      home: LoginScreen(),
+      home: HomeScreenClient(),
 
     );
   }

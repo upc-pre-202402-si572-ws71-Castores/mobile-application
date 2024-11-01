@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:transport_app_mobile/features/serviceManagement/screens/profile_user.dart';
+import 'package:transport_app_mobile/features/service-management/screens/profile_client.dart';
 import 'package:transport_app_mobile/shared/widgets/bottomNavigationBar.dart';
 import 'package:transport_app_mobile/shared/screens/screens.dart';
 
@@ -15,9 +15,9 @@ class _HomeScreenClientState extends State<HomeScreenClient>
 
   // Lista de pantallas que se mostrarán según el índice
   static List<Widget> _widgetOptions = <Widget>[
-    dashboard(),
-    Text('Home'),
-    Text('History'),
+    DashboardClient(),
+    ClientOffersScreen(),
+    HistoryClientScreen(),
     ProfileClient(),
   ];
 
