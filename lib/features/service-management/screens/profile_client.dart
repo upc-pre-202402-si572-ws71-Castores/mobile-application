@@ -1,9 +1,42 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:transport_app_mobile/features/service-management/services/Management_service.dart';
 
-class ProfileClient extends StatelessWidget {
-  const ProfileClient({super.key});
+class ProfileClient extends StatefulWidget {
+  final int profileId;
+
+  const ProfileClient({super.key, required this.profileId});
+
+  @override
+  _ProfileClientState createState() => _ProfileClientState();
+}
+
+class _ProfileClientState extends State<ProfileClient> {
+  final ManagementService _managementService = ManagementService();
+  String fullName = '';
+  String city = '';
+  String description = 'Soy un cliente que busca servicios de transporte confiables para el envío de mercadería. Valoro la puntualidad y la seguridad en el traslado, y prefiero empresas que ofrezcan monitoreo en tiempo real para estar siempre informado sobre el estado de mis envíos.';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchProfile();
+  }
+
+  Future<void> _fetchProfile() async {
+    final profileData = await _managementService.getProfileById(widget.profileId);
+
+    if (profileData != null) {
+      setState(() {
+        fullName = profileData['fullName'] ?? 'Nombre no disponible';
+        city = profileData['city'] ?? 'Ciudad no disponible';
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error al obtener el perfil')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,25 +58,17 @@ class ProfileClient extends StatelessWidget {
                   begin: FractionalOffset.bottomCenter,
                   end: FractionalOffset.topCenter),
               borderRadius:
-                  BorderRadius.vertical(bottom: Radius.circular(25.0))),
+              BorderRadius.vertical(bottom: Radius.circular(25.0))),
         ),
-        title: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 30.0),
-                //alignment: Alignment.bottomLeft,
-                child: Text(
-                  'Profile',
-                  style: TextStyle(
-                    fontSize: 35,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              )
-            ],
+        title: const Padding(
+          padding: EdgeInsets.only(top: 30.0),
+          child: Text(
+            'Profile',
+            style: TextStyle(
+              fontSize: 35,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         toolbarHeight: 110,
@@ -59,19 +84,19 @@ class ProfileClient extends StatelessWidget {
                 backgroundImage: AssetImage('assets/samantha_myers.jpg'),
               ),
               const SizedBox(height: 10),
-              const Text(
-                'Samantha Myers',
-                style: TextStyle(
+              Text(
+                fullName.isNotEmpty ? fullName : 'Cargando...',
+                style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: Color.fromARGB(255, 0, 17, 35),
                 ),
               ),
               const SizedBox(height: 10),
-              const Text(
-                'Soy un cliente que busca servicios de transporte confiables para el envío de mercadería. Valoro la puntualidad y la seguridad en el traslado, y prefiero empresas que ofrezcan monitoreo en tiempo real para estar siempre informado sobre el estado de mis envíos.',
+              Text(
+                description,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, color: Colors.black54),
+                style: const TextStyle(fontSize: 16, color: Colors.black54),
               ),
               const SizedBox(height: 20),
               Container(
@@ -89,18 +114,21 @@ class ProfileClient extends StatelessWidget {
                   ],
                 ),
                 child: Column(
-                  children: const [
-                    ListTile(
+                  children: [
+                    const ListTile(
                       leading: Icon(Icons.phone, color: Colors.black54),
                       title: Text('+51 989893298', style: TextStyle(fontSize: 18)),
                     ),
-                    ListTile(
+                    const ListTile(
                       leading: Icon(Icons.perm_identity, color: Colors.black54),
                       title: Text('67875567', style: TextStyle(fontSize: 18)),
                     ),
                     ListTile(
-                      leading: Icon(Icons.location_on, color: Colors.black54),
-                      title: Text('San Martin, Lima', style: TextStyle(fontSize: 18)),
+                      leading: const Icon(Icons.location_on, color: Colors.black54),
+                      title: Text(
+                        city.isNotEmpty ? city : 'Cargando...',
+                        style: const TextStyle(fontSize: 18),
+                      ),
                     ),
                   ],
                 ),
