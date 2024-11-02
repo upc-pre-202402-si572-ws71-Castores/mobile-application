@@ -18,7 +18,7 @@ class _HomeScreenClientState extends State<HomeScreenClient>
     DashboardClient(),
     ClientOffersScreen(),
     HistoryClientScreen(),
-    ProfileClient(),
+    ProfileClient(profileId: 1),
   ];
 
   // Cuando se selecciona un ítem en la barra de navegación
