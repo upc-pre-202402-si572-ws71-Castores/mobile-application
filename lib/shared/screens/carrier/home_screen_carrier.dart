@@ -16,7 +16,7 @@ class _HomeScreenCarrierState extends State<HomeScreenCarrier> with SingleTicker
     DashboardCarrier(),
     CarrierOffersScreen(),
     HistoryCarrierScreen(),
-    ProfileCarrier(),
+    ProfileCarrier(profileId: 3),
   ];
 
   // Cuando se selecciona un ítem en la barra de navegación
