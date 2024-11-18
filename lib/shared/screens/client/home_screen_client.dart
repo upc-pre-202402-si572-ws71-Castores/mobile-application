@@ -15,10 +15,10 @@ class _HomeScreenClientState extends State<HomeScreenClient>
 
   // Lista de pantallas que se mostrarán según el índice
   static List<Widget> _widgetOptions = <Widget>[
-    DashboardClient(),
+    DashboardClient(requestId: 3, profileId: 5),
     ClientOffersScreen(),
     HistoryClientScreen(),
-    ProfileClient(profileId: 1),
+    ProfileClient(profileId: 4),
   ];
 
   // Cuando se selecciona un ítem en la barra de navegación

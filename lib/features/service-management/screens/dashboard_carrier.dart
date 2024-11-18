@@ -1,10 +1,71 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:transport_app_mobile/features/service-management/services/Management_service.dart';
 
-class DashboardCarrier extends StatelessWidget {
-  const DashboardCarrier({super.key});
+class DashboardCarrier extends StatefulWidget {
+  final int requestId;
+  final int profileId;
+
+  const DashboardCarrier({super.key, required this.requestId, required this.profileId});
+
+  @override
+  _DashboardCarrierState createState() => _DashboardCarrierState();
+}
+
+class _DashboardCarrierState extends State<DashboardCarrier> {
+  final ManagementService _managementService = ManagementService();
+  //DashboardCarrier({super.key, requestId});
+  String startLocation = '';
+  String arrivalPlace = '';
+  int idealTemperature = 0;
+  int idealWeight = 0;
+  int shipmentId = 0;
+  String fullName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchRequest();
+    _fetchProfile();
+  }
+
+  Future<void> _fetchRequest() async {
+    final requestData = await _managementService.getRequestById(widget.requestId);
+
+    if (requestData != null) {
+      setState(() {
+        startLocation=
+        requestData['startLocation'] ?? 'Location no disponible';
+        arrivalPlace=
+        requestData['arrivalPlace'] ?? 'Place no disponible';
+        idealTemperature=
+        requestData['idealTemperature'] ?? 0;
+        idealWeight=
+        requestData['idealWeight'] ?? 0;
+        shipmentId=
+        requestData['shipmentId'] ?? 0;
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error al obtener los datos')),
+      );
+    }
+  }
+
+  Future<void> _fetchProfile() async {
+    final profileData = await _managementService.getProfileById(widget.profileId);
+
+    if (profileData != null) {
+      setState(() {
+        fullName = profileData['fullName'] ?? 'Nombre no disponible';
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error al obtener el perfil')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +231,7 @@ class DashboardCarrier extends StatelessWidget {
                             color: const Color.fromARGB(52, 158, 158, 158),
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          child: const Column(
+                          child: Column(
                             children: [
                               Text(
                                 'Ideal Temperature',
@@ -181,7 +242,9 @@ class DashboardCarrier extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                '21ºC',
+                                idealTemperature != null
+                                    ? idealTemperature.toString()
+                                    : 'Calibrating',
                                 style: TextStyle(
                                   fontSize: 35,
                                   color: Color.fromARGB(255, 10, 35, 78),
@@ -200,7 +263,7 @@ class DashboardCarrier extends StatelessWidget {
                             color: const Color.fromARGB(52, 158, 158, 158),
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          child: const Column(
+                          child: Column(
                             children: [
                               Text(
                                 'Ideal Weight',
@@ -211,7 +274,9 @@ class DashboardCarrier extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                '2.7 KG',
+                                idealWeight != null
+                                    ? idealWeight.toString()
+                                    : 'Calibrating',
                                 style: TextStyle(
                                   fontSize: 35,
                                   color: Color.fromARGB(255, 10, 35, 78),
@@ -245,8 +310,8 @@ class DashboardCarrier extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            const Text(
-                              'Anthony Quispe',
+                            Text(
+                              fullName.isNotEmpty ? fullName : 'Cargando...',
                               style: TextStyle(
                                 fontSize: 15,
                                 color: Color.fromARGB(255, 10, 35, 78),
@@ -264,7 +329,7 @@ class DashboardCarrier extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Container(
-                            child: const Column(
+                            child: Column(
                               children: [
                                 Text(
                                   'Start Location',
@@ -275,7 +340,7 @@ class DashboardCarrier extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  'Lima',
+                                  startLocation.isNotEmpty ? startLocation : 'Cargando...',
                                   style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.grey,
@@ -294,7 +359,7 @@ class DashboardCarrier extends StatelessWidget {
                         ),
                         Expanded(
                           child: Container(
-                            child: const Column(
+                            child: Column(
                               children: [
                                 Text(
                                   'Arrival Place',
@@ -305,7 +370,7 @@ class DashboardCarrier extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  'Callao',
+                                  arrivalPlace.isNotEmpty ? arrivalPlace : 'Cargando...',
                                   style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.grey,
@@ -391,5 +456,3 @@ class DashboardCarrier extends StatelessWidget {
     );
   }
 }
-
-
