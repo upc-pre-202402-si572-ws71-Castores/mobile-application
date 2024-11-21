@@ -1,10 +1,93 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:transport_app_mobile/features/service-management/services/Management_service.dart';
+import 'dart:async';
 
-class DashboardCarrier extends StatelessWidget {
-  const DashboardCarrier({super.key});
+class DashboardCarrier extends StatefulWidget {
+  final int profileId;
+
+  const DashboardCarrier({super.key, required this.profileId});
+
+  @override
+  _DashboardCarrierState createState() => _DashboardCarrierState();
+}
+
+class _DashboardCarrierState extends State<DashboardCarrier> {
+  final ManagementService _managementService = ManagementService();
+  Timer? _timer; // Variable para almacenar el temporizador
+  String startLocation = '';
+  String arrivalPlace = '';
+  int idealTemperature = 0;
+  int idealWeight = 0;
+  int shipmentId = 0;
+  String fullName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchRequest();
+    _fetchProfile();
+
+    // Configurar actualización automática cada 10 segundos
+    _timer = Timer.periodic(
+      const Duration(seconds: 10),
+      (_) => _fetchRequest(), // Llama a la función de actualización
+    );
+  }
+
+  @override
+  void dispose() {
+    // Cancelar el temporizador cuando se destruye el widget
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _fetchRequest() async {
+    try {
+      final requestData = await _managementService.getRequestById(1);
+
+      if (requestData != null) {
+        setState(() {
+          // Verifica si el valor es nulo y usa un valor predeterminado
+          idealTemperature =
+              (requestData['idealTemperature'] as num?)?.toInt() ?? 0;
+          idealWeight = (requestData['idealWeight'] as num?)?.toInt() ?? 0;
+          startLocation =
+              requestData['startLocation'] ?? 'Location no disponible';
+          arrivalPlace = requestData['arrivalPlace'] ?? 'Place no disponible';
+          shipmentId = (requestData['shipmentId'] as num?)?.toInt() ?? 0;
+        });
+      } else {
+        throw Exception('No se recibieron datos válidos del servidor.');
+      }
+    } catch (error) {
+      print('Error al obtener los datos: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al obtener los datos: $error')),
+      );
+    }
+  }
+
+  Future<void> _fetchProfile() async {
+    try {
+      final profileData =
+          await _managementService.getProfileById(widget.profileId);
+
+      if (profileData != null) {
+        setState(() {
+          fullName = profileData['fullName'] ?? 'Nombre no disponible';
+        });
+      } else {
+        throw Exception('No se recibieron datos válidos del servidor.');
+      }
+    } catch (error) {
+      print('Error al obtener el perfil: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al obtener el perfil: $error')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +182,6 @@ class DashboardCarrier extends StatelessWidget {
                                 index == 0
                                     ? 'Actual Temperature'
                                     : 'Actual Weight',
-                                //'Actual Weight',
                                 style: const TextStyle(
                                   fontSize: 20,
                                   color: Color.fromARGB(255, 10, 35, 78),
@@ -118,7 +200,9 @@ class DashboardCarrier extends StatelessWidget {
                                   color: const Color.fromARGB(255, 10, 35, 78),
                                 ),
                                 Text(
-                                  index == 0 ? '05º C' : '1 KG',
+                                  index == 0
+                                      ? '$idealTemperatureº C'
+                                      : '$idealWeight KG',
                                   style: const TextStyle(
                                     fontSize: 40,
                                     color: Color.fromARGB(255, 10, 35, 78),
@@ -129,13 +213,11 @@ class DashboardCarrier extends StatelessWidget {
                             )
                           ],
                         ),
-
-                        //iconos
                       ),
                     );
                   }),
             ),
-            //),
+
 
             Container(
               padding: const EdgeInsets.all(9.0),
@@ -170,7 +252,7 @@ class DashboardCarrier extends StatelessWidget {
                             color: const Color.fromARGB(52, 158, 158, 158),
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          child: const Column(
+                          child: Column(
                             children: [
                               Text(
                                 'Ideal Temperature',
@@ -181,7 +263,9 @@ class DashboardCarrier extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                '21ºC',
+                                idealTemperature != null
+                                    ? idealTemperature.toString()
+                                    : 'Calibrating',
                                 style: TextStyle(
                                   fontSize: 35,
                                   color: Color.fromARGB(255, 10, 35, 78),
@@ -200,7 +284,7 @@ class DashboardCarrier extends StatelessWidget {
                             color: const Color.fromARGB(52, 158, 158, 158),
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          child: const Column(
+                          child: Column(
                             children: [
                               Text(
                                 'Ideal Weight',
@@ -211,7 +295,9 @@ class DashboardCarrier extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                '2.7 KG',
+                                idealWeight != null
+                                    ? idealWeight.toString()
+                                    : 'Calibrating',
                                 style: TextStyle(
                                   fontSize: 35,
                                   color: Color.fromARGB(255, 10, 35, 78),
@@ -245,14 +331,14 @@ class DashboardCarrier extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            const Text(
-                              'Anthony Quispe',
+                            Text(
+                              'Rod Sabino', // Texto fijo
                               style: TextStyle(
                                 fontSize: 15,
                                 color: Color.fromARGB(255, 10, 35, 78),
                                 fontWeight: FontWeight.bold,
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -264,7 +350,7 @@ class DashboardCarrier extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Container(
-                            child: const Column(
+                            child: Column(
                               children: [
                                 Text(
                                   'Start Location',
@@ -275,7 +361,7 @@ class DashboardCarrier extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  'Lima',
+                                  startLocation.isNotEmpty ? startLocation : 'Cargando...',
                                   style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.grey,
@@ -294,7 +380,7 @@ class DashboardCarrier extends StatelessWidget {
                         ),
                         Expanded(
                           child: Container(
-                            child: const Column(
+                            child: Column(
                               children: [
                                 Text(
                                   'Arrival Place',
@@ -305,7 +391,7 @@ class DashboardCarrier extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  'Callao',
+                                  arrivalPlace.isNotEmpty ? arrivalPlace : 'Cargando...',
                                   style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.grey,
@@ -391,5 +477,3 @@ class DashboardCarrier extends StatelessWidget {
     );
   }
 }
-
-
