@@ -70,37 +70,36 @@ class ManagementService {
     }
   }
 
-  Future<Map<String, dynamic>?> getIotProcess(int id) async {}
 
-  Future<Map<String, dynamic>?> getRequestById(int requestId) async {
-    final url = Uri.parse('$baseUrl/api/v1/request/$requestId');
+Future<Map<String, dynamic>?> getRequestById([int requestId = 1]) async {
+  final url = Uri.parse('$baseUrl/api/v1/request/$requestId');
 
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('token');
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
 
-      if (token == null) {
-        print('Token no encontrado. Por favor, inicia sesión.');
-        return null;
-      }
-
-      final response = await http.get(
-        url,
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
-      } else {
-        print('Error al obtener el perfil: ${response.statusCode}');
-        return null;
-      }
-    } catch (error) {
-      print('Error de conexión: $error');
+    if (token == null) {
+      print('Token no encontrado. Por favor, inicia sesión.');
       return null;
     }
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      print('Error al obtener el perfil: ${response.statusCode}');
+      return null;
+    }
+  } catch (error) {
+    print('Error de conexión: $error');
+    return null;
   }
+}
 }

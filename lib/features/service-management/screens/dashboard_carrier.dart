@@ -2,12 +2,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:transport_app_mobile/features/service-management/services/Management_service.dart';
+import 'dart:async';
 
 class DashboardCarrier extends StatefulWidget {
-  final int requestId;
   final int profileId;
 
-  const DashboardCarrier({super.key, required this.requestId, required this.profileId});
+  const DashboardCarrier({super.key, required this.profileId});
 
   @override
   _DashboardCarrierState createState() => _DashboardCarrierState();
@@ -15,7 +15,7 @@ class DashboardCarrier extends StatefulWidget {
 
 class _DashboardCarrierState extends State<DashboardCarrier> {
   final ManagementService _managementService = ManagementService();
-  //DashboardCarrier({super.key, requestId});
+  Timer? _timer; // Variable para almacenar el temporizador
   String startLocation = '';
   String arrivalPlace = '';
   int idealTemperature = 0;
@@ -28,41 +28,63 @@ class _DashboardCarrierState extends State<DashboardCarrier> {
     super.initState();
     _fetchRequest();
     _fetchProfile();
+
+    // Configurar actualización automática cada 10 segundos
+    _timer = Timer.periodic(
+      const Duration(seconds: 10),
+      (_) => _fetchRequest(), // Llama a la función de actualización
+    );
+  }
+
+  @override
+  void dispose() {
+    // Cancelar el temporizador cuando se destruye el widget
+    _timer?.cancel();
+    super.dispose();
   }
 
   Future<void> _fetchRequest() async {
-    final requestData = await _managementService.getRequestById(widget.requestId);
+    try {
+      final requestData = await _managementService.getRequestById(1);
 
-    if (requestData != null) {
-      setState(() {
-        startLocation=
-        requestData['startLocation'] ?? 'Location no disponible';
-        arrivalPlace=
-        requestData['arrivalPlace'] ?? 'Place no disponible';
-        idealTemperature=
-        requestData['idealTemperature'] ?? 0;
-        idealWeight=
-        requestData['idealWeight'] ?? 0;
-        shipmentId=
-        requestData['shipmentId'] ?? 0;
-      });
-    } else {
+      if (requestData != null) {
+        setState(() {
+          // Verifica si el valor es nulo y usa un valor predeterminado
+          idealTemperature =
+              (requestData['idealTemperature'] as num?)?.toInt() ?? 0;
+          idealWeight = (requestData['idealWeight'] as num?)?.toInt() ?? 0;
+          startLocation =
+              requestData['startLocation'] ?? 'Location no disponible';
+          arrivalPlace = requestData['arrivalPlace'] ?? 'Place no disponible';
+          shipmentId = (requestData['shipmentId'] as num?)?.toInt() ?? 0;
+        });
+      } else {
+        throw Exception('No se recibieron datos válidos del servidor.');
+      }
+    } catch (error) {
+      print('Error al obtener los datos: $error');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error al obtener los datos')),
+        SnackBar(content: Text('Error al obtener los datos: $error')),
       );
     }
   }
 
   Future<void> _fetchProfile() async {
-    final profileData = await _managementService.getProfileById(widget.profileId);
+    try {
+      final profileData =
+          await _managementService.getProfileById(widget.profileId);
 
-    if (profileData != null) {
-      setState(() {
-        fullName = profileData['fullName'] ?? 'Nombre no disponible';
-      });
-    } else {
+      if (profileData != null) {
+        setState(() {
+          fullName = profileData['fullName'] ?? 'Nombre no disponible';
+        });
+      } else {
+        throw Exception('No se recibieron datos válidos del servidor.');
+      }
+    } catch (error) {
+      print('Error al obtener el perfil: $error');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error al obtener el perfil')),
+        SnackBar(content: Text('Error al obtener el perfil: $error')),
       );
     }
   }
@@ -160,7 +182,6 @@ class _DashboardCarrierState extends State<DashboardCarrier> {
                                 index == 0
                                     ? 'Actual Temperature'
                                     : 'Actual Weight',
-                                //'Actual Weight',
                                 style: const TextStyle(
                                   fontSize: 20,
                                   color: Color.fromARGB(255, 10, 35, 78),
@@ -179,7 +200,9 @@ class _DashboardCarrierState extends State<DashboardCarrier> {
                                   color: const Color.fromARGB(255, 10, 35, 78),
                                 ),
                                 Text(
-                                  index == 0 ? '05º C' : '1 KG',
+                                  index == 0
+                                      ? '$idealTemperatureº C'
+                                      : '$idealWeight KG',
                                   style: const TextStyle(
                                     fontSize: 40,
                                     color: Color.fromARGB(255, 10, 35, 78),
@@ -190,13 +213,11 @@ class _DashboardCarrierState extends State<DashboardCarrier> {
                             )
                           ],
                         ),
-
-                        //iconos
                       ),
                     );
                   }),
             ),
-            //),
+
 
             Container(
               padding: const EdgeInsets.all(9.0),
@@ -311,13 +332,13 @@ class _DashboardCarrierState extends State<DashboardCarrier> {
                               ),
                             ),
                             Text(
-                              fullName.isNotEmpty ? fullName : 'Cargando...',
+                              'Rod Sabino', // Texto fijo
                               style: TextStyle(
                                 fontSize: 15,
                                 color: Color.fromARGB(255, 10, 35, 78),
                                 fontWeight: FontWeight.bold,
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
